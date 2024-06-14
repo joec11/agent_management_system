@@ -12,7 +12,7 @@ def setup_environment():
     # Teardown: Reset the environment variable
     del os.environ['OPENAI_API_KEY']
 
-def test_app_history_command(capfd, monkeypatch):
+def test_app_history_command(capfd, monkeypatch, setup_environment):
     """Test that the REPL correctly handles the 'history' command."""
     # Simulate user entering 'history' followed by 'done', then 'exit'
     inputs = iter(['history', 'done', 'exit'])
@@ -35,7 +35,7 @@ def test_app_history_command(capfd, monkeypatch):
     monkeypatch.setattr('builtins.input', lambda _: next(inputs))
     assert "" in out, "\'exit\' was not entered"
 
-def test_app_movies_command(capfd, monkeypatch):
+def test_app_movies_command(capfd, monkeypatch, setup_environment):
     """Test that the REPL correctly handles the 'movies' command."""
     # Simulate user entering 'movies' followed by 'done', then 'exit'
     inputs = iter(['movies', 'done', 'exit'])
