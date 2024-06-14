@@ -1,5 +1,16 @@
 """Test the history and movies commands"""
+import os
+import pytest
 from app import App
+
+@pytest.fixture
+def setup_environment():
+    """Simulate setting environment variables"""
+    # Set up the environment variable
+    os.environ['OPENAI_API_KEY'] = 'true'
+    yield
+    # Teardown: Reset the environment variable
+    del os.environ['OPENAI_API_KEY']
 
 def test_app_history_command(capfd, monkeypatch):
     """Test that the REPL correctly handles the 'history' command."""
