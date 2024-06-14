@@ -1,4 +1,4 @@
-"""Test the history and movies commands"""
+"""Test the financial_advisor, history, and movies commands"""
 import os
 import pytest
 from app import App
@@ -11,6 +11,29 @@ def setup_environment():
     yield
     # Teardown: Reset the environment variable
     del os.environ['OPENAI_API_KEY']
+
+def test_app_financial_advisor_command(capfd, monkeypatch, setup_environment):
+    """Test that the REPL correctly handles the 'financial_advisor' command."""
+    # Simulate user entering 'financial_advisor' followed by 'done', then 'exit'
+    inputs = iter(['financial_advisor', 'done', 'exit'])
+    monkeypatch.setattr('builtins.input', lambda _: next(inputs))
+
+    app = App()
+    app.start()  # Assuming App.start() is now a static method based on previous discussions
+
+    # Capture the standard output
+    out, _ = capfd.readouterr()
+
+    # Check if the output contains the 'financial_advisor' command
+    assert "financial_advisor" in out, "The output does not contain the 'financial_advisor' command"
+
+    # Check if 'done' was entered
+    monkeypatch.setattr('builtins.input', lambda _: next(inputs))
+    assert "" in out, "\'done\' was not entered"
+
+    # Check if 'exit' was entered
+    monkeypatch.setattr('builtins.input', lambda _: next(inputs))
+    assert "" in out, "\'exit\' was not entered"
 
 def test_app_history_command(capfd, monkeypatch, setup_environment):
     """Test that the REPL correctly handles the 'history' command."""
